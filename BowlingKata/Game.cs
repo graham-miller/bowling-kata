@@ -5,18 +5,18 @@ namespace BowlingKata
     public class Game
     {
         private const int TenPins = 10;
-        private readonly List<int> _pins = new List<int>();
+        private readonly List<int> _rolls = new List<int>();
 
         public void Roll(int pins)
         {
-            _pins.Add(pins);
+            _rolls.Add(pins);
         }
 
         public int Score()
         {
             var score = 0;
 
-            for (var roll = 0; roll < _pins.Count; roll++)
+            for (var roll = 0; roll < _rolls.Count; roll++)
             {
                 score += Score(roll);
 
@@ -33,36 +33,39 @@ namespace BowlingKata
                 return ScoreSpare(roll);
 
             if (IsStrike(roll))
-            {
                 return ScoreStrike(roll);
-            }
 
-            return _pins[roll];
+            return _rolls[roll];
         }
 
         private bool IsSpare(int roll)
         {
-            return roll > 0 && _pins[roll] + _pins[roll - 1] == TenPins;
+            return !IsFirst(roll) && _rolls[roll] + _rolls[roll - 1] == TenPins;
+        }
+
+        private static bool IsFirst(int roll)
+        {
+            return roll == 0;
         }
 
         private int ScoreSpare(int roll)
         {
-            return _pins[roll] + _pins[roll + 1];
+            return _rolls[roll] + _rolls[roll + 1];
         }
 
         private bool IsStrike(int roll)
         {
-            return _pins[roll] == TenPins;
+            return _rolls[roll] == TenPins;
         }
 
         private int ScoreStrike(int roll)
         {
-            return _pins[roll] + _pins[roll + 1] + _pins[roll + 2];
+            return _rolls[roll] + _rolls[roll + 1] + _rolls[roll + 2];
         }
 
         private bool IsSpareBonus(int roll)
         {
-            return IsSpare(roll) && roll == _pins.Count - 2;
+            return IsSpare(roll) && roll == _rolls.Count - 2;
         }
     }
 }
